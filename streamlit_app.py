@@ -56,7 +56,7 @@ import requests
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
 # 2. Pass the headers argument into your get request
-#smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", headers=headers)
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", headers=headers)
 
 # 3. Render the dataframe container safely
 sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
