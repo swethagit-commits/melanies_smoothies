@@ -56,8 +56,22 @@ import requests
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
 # 2. Pass the headers argument into your get request
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", headers=headers)
+#smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", headers=headers)
 
 # 3. Render the dataframe container safely
 sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 
+
+
+# Fetch the nutrition payload safely
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+
+# Validate the server response is an HTTP 200 OK and contains content
+if smoothiefroot_response.status_code == 200 and smoothiefroot_response.text.strip():
+    try:
+        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+    except requests.exceptions.JSONDecodeError:
+        st.error("The API returned a response, but it was not valid JSON.")
+        st.text(smoothiefroot_response.text) # Display what the server actually sent
+else:
+    st.warning(f"Unable to fetch nutrition data. Server status code: {smoothiefroot_response.status_code}")
