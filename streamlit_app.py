@@ -44,7 +44,20 @@ if ingredients_list:
         st.success(f'Your Smoothie is ordered, {name_on_order}!', icon="✅")
         # New section
 # New section to display smoothiefroot nutrition information
-import requests
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+#import requests
+#smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
 # st.text(smoothiefroot_response.json())
+#sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+
+# New section to display smoothiefroot nutrition information
+import requests
+
+# 1. Add headers to mimic a standard browser profile
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+# 2. Pass the headers argument into your get request
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", headers=headers)
+
+# 3. Render the dataframe container safely
 sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+
