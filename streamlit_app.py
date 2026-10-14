@@ -56,10 +56,22 @@ import requests
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
 # 2. Pass the headers argument into your get request
-# 1. Safely make the API request
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+import requests
 
-# 2. Check if the response actually contains a valid server status
+# 1. Attempt the API connection safely
+try:
+    smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon", timeout=5)
+    
+    # 2. Check if the server responded successfully
+    if smoothiefroot_response.status_code == 200:
+        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+    else:
+        st.error(f"Nutrition endpoint unreachable. HTTP Status: {smoothiefroot_response.status_code}")
+
+# 3. Prevent the app from crashing if it encounters a 504 or network timeout
+except (requests.exceptions.RequestException, ValueError) as e:
+    st.error("The nutrition API server is currently experiencing a timeout (504). Please try again later!")
+
 if smoothiefroot_response.status_code == 200 and smoothiefroot_response.text.strip():
     try:
         # Safely parse JSON data into the dataframe container
